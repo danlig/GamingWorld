@@ -85,7 +85,7 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			MainFrame.this.loadPanel(login);
-			System.out.println("HELLO WORLDOOOO");
+			//System.out.println("HELLO WORLDOOOO");
 		}
 	}
 	
@@ -553,7 +553,7 @@ public class MainFrame extends JFrame {
 				try {
 					exe.registra(username.getText(), email.getText(), password.getText());
 					selectedUsername = username.getText();
-					loadPanel(profile);
+					loadPanel(login);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 					error.showMessageDialog(MainFrame.this, "Registrazione non andata a buon fine");
