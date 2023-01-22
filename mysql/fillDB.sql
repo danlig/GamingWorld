@@ -11,13 +11,19 @@
 -- INSERIMENTO ACCOUNT
  INSERT INTO Account VALUES ('adonis.koss','4f28e19b0a1d5aad175b965594c9dee1','sberge@example.com','2022-04-23'),
  ('adrain90','0ca55c81233458fbd2ecf74b8514c069','kristopher35@example.net','2022-01-25'),
- ('alana61','cec9bbf01c4d24cf73176a2dbc16cfaf','pgutkowski@example.com','2022-10-12');
+ ('alana61','cec9bbf01c4d24cf73176a2dbc16cfaf','pgutkowski@example.com','2022-10-12'),
+ ('alayna.weimann','12efcbfffddfcc13875b02ac985841e6','estella34@example.com','2022-03-25'),
+ ('alexandrea.torp','c848b4282dcbd034c5a5d6c498e702cd','orn.jaylen@example.com','2022-08-06'),
+ ('alexis05','1ac6596e98f50e8c63fa7e37e1101fb6','tpowlowski@example.org','2022-05-07'),
+ ('amelia35','e1dd3c31720c373d618caaca17dffd0c','brennan97@example.org','2022-08-26'),
+ ('bauch.arnulfo','6b6a67faf557359295a58eed4cc17a91','gemard@example.com','2022-06-20');
 INSERT INTO Account values ("antonio", "pass", "email", '2002-01-01');
 INSERT INTO Account values ("antonio2", "pass", "email", '2002-01-01');
 INSERT INTO Account values ("ambrogio", "pass", "email", '2001-01-01');
 
 -- INSERIMENTO AMICIZIA
 INSERT INTO Amicizia values ("antonio", "antonio2", '2003-02-02');
+INSERT INTO Amicizia values ("antonio", "ambrogio", '2003-02-02');
 INSERT INTO Amicizia values ("ambrogio", "antonio2", '2003-02-02');
 -- INSERT INTO Amicizia values ("antonio", "antonio", '2003-02-02'); #ERROR GENERATOR LINE
 
@@ -41,14 +47,49 @@ INSERT INTO Gioco (nome, memoriaOccupata, descrizione, pageURL, idPublisher) val
 INSERT INTO TeamGame values (3);
 
 -- INSERIMENTO TEAM
-INSERT INTO Team values ("Desperados", "adonis.koss", "adrain90", "alana61", "antonio", "antonio2");
+/*INSERT INTO Team values ("Desperados", "adonis.koss", "adrain90", "alana61", "antonio", "antonio2");
 INSERT INTO Team values ("Up-Elo", "ambrogio", "adrain90", "alana61", "antonio", "antonio2");
 INSERT INTO Team values ("Down-Elo", "ambrogio", "adrain90", "alana61", "antonio", "antonio2");
+INSERT INTO Team values ("Med-Elo", "alayna.weimann", "alexandrea.torp", "alexis05", "amelia35", "bauch.arnulfo");
+*/
+
+INSERT INTO Team values ("Desperados");
+INSERT INTO Team values ("Up-Elo");
+INSERT INTO Team values ("Down-Elo");
+INSERT INTO Team values ("Med-Elo");
+
+INSERT INTO Compone values ("Desperados", "adonis.koss");
+INSERT INTO Compone values ("Desperados", "adrain90");
+INSERT INTO Compone values ("Desperados", "alana61");
+INSERT INTO Compone values ("Desperados", "antonio");
+INSERT INTO Compone values ("Desperados", "antonio2");
+
+INSERT INTO Compone values ("Up-Elo", "ambrogio");
+INSERT INTO Compone values ("Up-Elo", "adrain90");
+INSERT INTO Compone values ("Up-Elo", "alana61");
+INSERT INTO Compone values ("Up-Elo", "antonio");
+INSERT INTO Compone values ("Up-Elo", "antonio2");
+
+INSERT INTO Compone values ("Down-Elo", "ambrogio");
+INSERT INTO Compone values ("Down-Elo", "adrain90");
+INSERT INTO Compone values ("Down-Elo", "alana61");
+INSERT INTO Compone values ("Down-Elo", "antonio");
+INSERT INTO Compone values ("Down-Elo", "antonio2");
+
+INSERT INTO Compone values ("Med-Elo", "alayna.weimann");
+INSERT INTO Compone values ("Med-Elo", "alexandrea.torp");
+INSERT INTO Compone values ("Med-Elo", "alexis05");
+INSERT INTO Compone values ("Med-Elo", "amelia35");
+INSERT INTO Compone values ("Med-Elo", "bauch.arnulfo");
+-- INSERT INTO Compone values ("Med-Elo", "ambrogio");
 
 -- INSERIMENTO MATCH
 INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Up-Elo", "Up-Elo", 2000, '2015-01-02');
 INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Up-Elo", "Desperados", "Up-Elo", 2000, '2015-01-02');
 INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Up-Elo", "Desperados", "Up-Elo", 2000, '2015-01-02');
+INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Med-Elo", 2000, '2015-01-02');
+INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Med-Elo", 2000, '2015-01-02');
+INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Med-Elo", 2000, '2015-01-02');
 
 -- INSERIMENTO SERVERGAME
 INSERT INTO ServerGame values (4);
@@ -89,10 +130,18 @@ INSERT INTO Changelog (idGioco, descrizione, URL, specifiche) values (1, "descri
 -- INSERIMENTO ACHIEVEMENT
 INSERT INTO Achievement values ("Primo Sangue", 3, "Hai ucciso il tuo primo nemico");
 INSERT INTO Achievement values ("Ultimo a sopravvivere", 4, "Sei rimasto l'ultimo in vita in una modalità di gioco");
+INSERT INTO Achievement values ("L'inizio", 1, "Hai iniziato la tua avventura!");
+
+INSERT INTO Possiede values ("antonio", 3, '2002-01-01', 20);
+INSERT INTO Possiede values ("antonio", 4, '2003-01-01', 10);
+INSERT INTO Possiede values ("antonio2", 3, '2020-02-04', 0);
+INSERT INTO Possiede values ("antonio2", 4, '2004-01-01', 20);
+INSERT INTO Possiede values ("ambrogio", 4, '2004-01-01', 0); 
 
 -- INSERIMENTO SBLOCCA
 INSERT INTO Sblocca values ("antonio", "Primo Sangue", 3);
 INSERT INTO Sblocca values ("antonio2", "Primo Sangue", 3);
+-- INSERT INTO Sblocca values ("antonio", "L'inizio", 1);
 
 -- INSERIMENTO POSSIEDE
 /*
@@ -100,7 +149,3 @@ INSERT INTO Possiede (username, idGioco, dataAcquisto) values ("antonio", 3, '20
 INSERT INTO Possiede (username, idGioco, dataAcquisto) values ("antonio", 4, '2003-01-01');
 INSERT INTO Possiede (username, idGioco, dataAcquisto) values ("antonio2", 4, '2004-01-01'); 
 */
-INSERT INTO Possiede values ("antonio", 3, '2002-01-01', 20);
-INSERT INTO Possiede values ("antonio", 4, '2003-01-01', 20);
-INSERT INTO Possiede values ("antonio2", 4, '2004-01-01', 20);
-INSERT INTO Possiede values ("ambrogio", 4, '2004-01-01', 20); 

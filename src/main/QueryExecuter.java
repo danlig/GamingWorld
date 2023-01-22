@@ -127,12 +127,15 @@ public class QueryExecuter {
 		String query = """
 					SELECT   
 						(SELECT Count(*)
-						FROM Team T, `Match` M
+						FROM Team T, `Match` M, Compone C
 						WHERE (T.nome = M.team1 OR T.nome = M.team2) 
-						AND (T.username1 = ? OR T.username2 = ? OR T.username3 = ? OR T.username4 = ? OR T.username5 = ? )
+						AND T.nome = C.nome
+						AND C.componente = ?
 						AND M.teamVincitore = T.nome) / Count(*) as WinRate
-						FROM Team T, `Match` M 
-						WHERE (T.nome = M.team1 OR T.nome = M.team2) AND (T.username1 = ? OR T.username2 = ? OR T.username3 = ? OR T.username4 = ? OR T.username5 = ? );
+						FROM Team T, `Match` M, Compone C
+						WHERE (T.nome = M.team1 OR T.nome = M.team2) 
+                        AND T.nome = C.nome
+                        AND (C.componente = ?);
 
 					""";
 		
@@ -190,13 +193,14 @@ public class QueryExecuter {
 				FROM Account
 				WHERE 0.5 < (SELECT   
 					(SELECT Count(*)
-						FROM Team T, `Match` M
+						FROM Team T, `Match` M, Compone C
 						WHERE (T.nome = M.team1 OR T.nome = M.team2) 
-						AND (T.username1 = username OR T.username2 = username OR T.username3 = username OR T.username4 = username OR T.username5 = username )
-						AND M.teamVincitore = T.nome ) 
+						AND C.componente = username 
+						AND M.teamVincitore = T.nome  
+                        AND C.nome = T.nome )
 				/ Count(*) as WinRate
-				FROM Team T, `Match` M 
-				WHERE (T.nome = M.team1 OR T.nome = M.team2) AND (T.username1 = username OR T.username2 = username OR T.username3 = username OR T.username4 = username OR T.username5 = username) );
+				FROM Team T, `Match` M, Compone C 
+				WHERE (T.nome = M.team1 OR T.nome = M.team2) AND C.componente = username AND C.nome = T.nome);
 
 				""";
 		

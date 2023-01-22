@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS Amicizia (
 ;
 
 
--- TRIGGERS FOR AMICIZIA
+-- CREATE TRIGGERS
 DELIMITER //
 CREATE TRIGGER differentUsername BEFORE INSERT ON Amicizia for each row 
 begin 
@@ -190,13 +190,13 @@ CREATE TABLE IF NOT EXISTS Possiede (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS Team (
   nome VARCHAR(50) NOT NULL,
---  username1 VARCHAR(50) NOT NULL,
---  username2 VARCHAR(50) NOT NULL,
---  username3 VARCHAR(50) NOT NULL,
---  username4 VARCHAR(50) NOT NULL,
---  username5 VARCHAR(50) NOT NULL,
-  PRIMARY KEY (nome)
-/*  INDEX username1_idx (username1 ASC) VISIBLE,
+  username1 VARCHAR(50) NOT NULL,
+  username2 VARCHAR(50) NOT NULL,
+  username3 VARCHAR(50) NOT NULL,
+  username4 VARCHAR(50) NOT NULL,
+  username5 VARCHAR(50) NOT NULL,
+  PRIMARY KEY (nome),
+  INDEX username1_idx (username1 ASC) VISIBLE,
   INDEX username2_idx (username2 ASC) VISIBLE,
   INDEX username3_idx (username3 ASC) VISIBLE,
   INDEX username4_idx (username4 ASC) VISIBLE,
@@ -225,27 +225,10 @@ CREATE TABLE IF NOT EXISTS Team (
     FOREIGN KEY (username5)
     REFERENCES Account (username)
     ON DELETE CASCADE
-    ON UPDATE CASCADE*/
+    ON UPDATE CASCADE
 );
 
 
-CREATE TABLE IF NOT EXISTS Compone (
-	nome VARCHAR(50) NOT NULL,
-    CONSTRAINT nome 
-    FOREIGN KEY (nome) references Team (nome),
-    componente VARCHAR(50) NOT NULL,
-    CONSTRAINT componente 
-    FOREIGN KEY (componente) references Account (username)
-);
-
-
-DELIMITER //
-CREATE TRIGGER componeMaxMemebers BEFORE INSERT ON Compone for each row 
-begin 
-IF (SELECT Count(*) FROM Compone as C2 WHERE new.nome = C2.nome) = 5 THEN signal sqlstate '45000';
-end if;
-end // 
-DELIMITER ; 
 -- -----------------------------------------------------
 -- Table TeamGame
 -- -----------------------------------------------------
@@ -465,12 +448,8 @@ CREATE TABLE IF NOT EXISTS Sblocca (
 );
 
 
-
--- CREATE TRIGGER SBLOCCA
-DELIMITER //
-CREATE TRIGGER sbloccaSePossiede BEFORE INSERT ON Sblocca for each row 
-begin 
-IF NOT EXISTS(SELECT * FROM Possiede as P WHERE P.idGioco = NEW.idGioco AND NEW.username = P.username) THEN signal sqlstate '45000';
-end if;
-end // 
-DELIMITER ; 
+/*
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+*/
