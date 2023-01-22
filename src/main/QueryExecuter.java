@@ -84,7 +84,7 @@ public class QueryExecuter {
 					(SELECT idGioco
 						FROM  Possiede
 						WHERE username = ?);
-				""";
+					""";
 		
 		PreparedStatement ps = conn.prepareStatement(query);
 		ps.setString(1, friend);
@@ -143,7 +143,7 @@ public class QueryExecuter {
 		
     	PreparedStatement ps = conn.prepareStatement(query);
     	
-    	for(int i=1;i<10 +1;i++)
+    	for(int i=1;i<2 +1;i++)
     		ps.setString(i, username);
     	
     	ResultSet rs = ps.executeQuery();
