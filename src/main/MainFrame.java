@@ -20,6 +20,7 @@ import java.util.function.Function;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
+	private static final long serialVersionUID = 454228441946425534L;
 	
 	public MainFrame(QueryExecuter exe) {
 		this.exe = exe;
@@ -141,7 +142,7 @@ public class MainFrame extends JFrame {
 			JPanel southPanel = new JPanel();
 			this.add(southPanel, BorderLayout.SOUTH);
 			
-			JButton deleteAccount = new JButton("Cancella");
+			JButton deleteAccount = new JButton("Cancella Account");
 			southPanel.add(deleteAccount);
 			deleteAccount.addActionListener(new ActionListener() {
 				@Override
@@ -227,10 +228,12 @@ public class MainFrame extends JFrame {
 			
 			JButton backButton = new JButton("BACK");
 			backButton.addActionListener(new BackToProfileListener());
-			this.add(backButton, BorderLayout.SOUTH);
+			this.add(backButton);
 		}
 		
 		public void load() {
+			
+			System.out.println("wewe");
 			
 			combo.removeAllItems();
 			
@@ -398,6 +401,7 @@ public class MainFrame extends JFrame {
 			this.add(scroll);
 			
 			JPanel southPanel = new JPanel();
+			southPanel.add(new JLabel("Id Gioco: "));
 			idGioco = new JTextField(5);
 			southPanel.add(idGioco);
 			
@@ -424,6 +428,7 @@ public class MainFrame extends JFrame {
 			JPanel northPanel = new JPanel();
 			this.add(northPanel, BorderLayout.NORTH);
 			
+			northPanel.add(new JLabel("Categoria"));
 			categoria = new JTextField(5);
 			northPanel.add(categoria);
 			
@@ -477,13 +482,13 @@ public class MainFrame extends JFrame {
 			JScrollPane scroll = new JScrollPane(area);
 			this.add(scroll);
 			
-			JPanel southPanel = new JPanel();
-			southPanel.add(new JLabel("Username amico: "));
+			JPanel northPanel = new JPanel();
+			northPanel.add(new JLabel("Username amico: "));
 			friend = new JTextField(5);
-			southPanel.add(friend);
+			northPanel.add(friend);
 			
 			JButton search = new JButton("Search");
-			southPanel.add(search, BorderLayout.SOUTH);
+			northPanel.add(search, BorderLayout.SOUTH);
 			
 			search.addActionListener(new ActionListener() {
 
@@ -505,7 +510,10 @@ public class MainFrame extends JFrame {
 				
 			});
 			
-			this.add(southPanel, BorderLayout.SOUTH);
+			this.add(northPanel, BorderLayout.NORTH);
+			JButton backButton = new JButton("BACK");
+			backButton.addActionListener(new BackToProfileListener());
+			this.add(backButton, BorderLayout.SOUTH);
 		}
 		
 		public void load() {
@@ -563,7 +571,7 @@ public class MainFrame extends JFrame {
 		southPanel.add(registra);
 		
 		JButton exitButton = new JButton("Esci");
-		exitButton.addActionListener(new BackToProfileListener());
+		exitButton.addActionListener(new BackToLoginListener());
 		southPanel.add(exitButton);
 		
 		return panel;

@@ -117,6 +117,8 @@ public class Gestore extends JPanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				area.setText("");
+				
 				southPanel.removeAll();
 				
 				southPanel.add(new JLabel("Nome team: "));
@@ -223,6 +225,7 @@ public class Gestore extends JPanel {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				southPanel.removeAll();
 				
 				area.setText("Lista dei publisher: (idPublisher, nome, sedeLegale, numeroGiochi)\n");
@@ -242,7 +245,7 @@ public class Gestore extends JPanel {
 					e1.printStackTrace();
 				}
 				
-
+				frame.loadPanel(Gestore.this);
 			}
 		});
 		buttons.add(button);
