@@ -63,7 +63,7 @@ public class MainFrame extends JFrame {
 		createBookMarkPanel = new CreateBookMarkPanel();
 		friendsWithGamePanel = new FriendsListWithGamePanel();
 		reportPanel = new ReportPanel();
-		deleteFriendPanel = new DeleteFriendPanel();
+		deleteFriendPanel = new FriendPanel();
 		
 		profile  = new ProfilePanel();
 		
@@ -113,14 +113,8 @@ public class MainFrame extends JFrame {
 		private JPanel panel;
 	}
 	
-	public class LoadablePanel extends JPanel{
-		LoadablePanel() {
-			
-		}
-		
-		public void load() {
-			
-		}
+	public abstract class LoadablePanel extends JPanel{
+		public abstract void load();
 	}
 	
 	public class ProfilePanel extends LoadablePanel {
@@ -180,7 +174,7 @@ public class MainFrame extends JFrame {
 			ChangeButtonPanel report = new ChangeButtonPanel(reportPanel, "Lista report");
 			panel.add(report);
 			
-			ChangeButtonPanel deleteFriend = new ChangeButtonPanel(deleteFriendPanel,"Cancella amicizia");
+			ChangeButtonPanel deleteFriend = new ChangeButtonPanel(deleteFriendPanel,"Sezione Amici");
 			panel.add(deleteFriend);
 		}
 		
@@ -201,13 +195,48 @@ public class MainFrame extends JFrame {
 		private JLabel username;
 	}
 	
-	public class DeleteFriendPanel extends LoadablePanel {
-		public DeleteFriendPanel() {
+//	public class CreateFriend extends LoadablePanel {
+//
+//		public CreateFriend() {
+//			
+//			this.setLayout(new BorderLayout());
+//			
+//			JPanel panel = new JPanel();
+//			this.add(panel);
+//			
+//			panel.add(new JLabel("Friend Username: "));
+//			
+//			friendUsername = new JTextField(5);
+//			panel.add(friendUsername);
+//			
+//			JButton backButton = new JButton("BACK");
+//			backButton.addActionListener(new BackToProfileListener());
+//			this.add(backButton, BorderLayout.SOUTH);
+//		}
+//		
+//		@Override
+//		public void load() {
+//			
+//		}
+//		
+//		private JTextField friendUsername;
+//	}
+	
+	public class FriendPanel extends LoadablePanel {
+		public FriendPanel() {
 			
 			List<String> friends = new ArrayList<>();
 			
+			this.setLayout(new GridLayout(10, 1));
+			
+			JPanel deleteFriendPanel = new JPanel();
+			this.add(deleteFriendPanel);
+			
+			JLabel label = new JLabel("Cancella amicizia: ");
+			deleteFriendPanel.add(label);
+			
 			combo = new JComboBox();
-			this.add(combo);
+			deleteFriendPanel.add(combo);
 			
 			JButton cancella = new JButton("Cancella");
 			cancella.addActionListener(new ActionListener() {
@@ -216,7 +245,7 @@ public class MainFrame extends JFrame {
 					try {
 						exe.deleteFriend(selectedUsername, (String)combo.getSelectedItem());
 						
-						MainFrame.this.loadPanel(DeleteFriendPanel.this);
+						MainFrame.this.loadPanel(FriendPanel.this);
 					} catch (SQLException e1) {
 						error.showMessageDialog(MainFrame.this, "Errore nella cancellazione dell'amicizia");
 						e1.printStackTrace();
@@ -224,11 +253,44 @@ public class MainFrame extends JFrame {
 					
 				}
 			});
-			this.add(cancella);
+			deleteFriendPanel.add(cancella);
+			
+			
+			JPanel createFriend = new JPanel();
+			this.add(createFriend);
+			
+			label = new JLabel("Crea amicizia: ");
+			createFriend.add(label);
+			
+			label = new JLabel("username: ");
+			createFriend.add(label);
+			
+			JTextField friendUsername = new JTextField(5);
+			createFriend.add(friendUsername);
+			
+			JButton create = new JButton("Crea");
+			create.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String usernameF = friendUsername.getText();
+					try {
+						exe.createFriend(selectedUsername, usernameF);
+						loadPanel(FriendPanel.this);
+					} catch (SQLException e1) {
+						error.showMessageDialog(MainFrame.this, "Errore durante la creazione dell'amicizia!!!");
+					}
+				}
+				
+			});
+			createFriend.add(create);
+			
+			JPanel backPanel = new JPanel();
+			this.add(backPanel);
 			
 			JButton backButton = new JButton("BACK");
+			backPanel.add(backButton);
 			backButton.addActionListener(new BackToProfileListener());
-			this.add(backButton);
 		}
 		
 		public void load() {
@@ -296,6 +358,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	public class FriendsListWithGamePanel extends LoadablePanel {
+		private static final long serialVersionUID = 4102504377089378584L;
 		public FriendsListWithGamePanel() {
 			
 			this.setLayout(new BorderLayout());
@@ -336,6 +399,10 @@ public class MainFrame extends JFrame {
 			this.add(backButton, BorderLayout.SOUTH);
 		}
 		
+		public void load() {
+			area.setText("");
+		}
+		
 		private JTextArea area;
 		private JTextField nomeGioco;
 		private JTextField username;
@@ -367,6 +434,7 @@ public class MainFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						exe.createBookMark(selectedUsername, Integer.parseInt(idServer.getText()), nomeBookMark.getText());
+						loadPanel(CreateBookMarkPanel.this);
 					} catch (NumberFormatException e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
@@ -383,8 +451,29 @@ public class MainFrame extends JFrame {
 		
 		public void load() {
 			
-			area.setText("");
-			
+            try {
+				ResultSet rs = exe.listOfFavoritesServers(selectedUsername);
+				StringBuilder result = new StringBuilder("");
+				result.append("lista preferiti nome, idServer, latenzaMedia: \n");
+				
+				while(rs.next()) {
+					String bookmarkName = rs.getString("nome");
+					int idServer = rs.getInt("idServer");
+					float latenza = rs.getFloat("latenzaMedia");
+					
+					result.append(bookmarkName + " ");
+					result.append(idServer);
+					result.append(" ");
+					result.append(latenza);
+					result.append("\n");
+				}
+				
+				area.setText(result.toString());
+				
+			} catch (SQLException e) {
+				error.showMessageDialog(MainFrame.this, "Errore nel caricamento dei bookmarks");
+				//e.printStackTrace();
+			}
 		}
 		
 		private JTextField idServer;

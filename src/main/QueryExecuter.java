@@ -59,6 +59,20 @@ public class QueryExecuter {
 		return ps.execute();
 	}
 	
+	public ResultSet listOfFavoritesServers(String username) throws SQLException {		
+		String query = """
+					SELECT Sa.nome, S.idServer, S.latenzaMedia
+					FROM Server S, Salva Sa
+					WHERE S.idServer = Sa.idServer AND Sa.username = ?;
+					""";
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		
+		ResultSet rs = ps.executeQuery();
+		return rs;
+	}
+	
 	public ResultSet listaGiochiPerCategoria(String categoria) throws SQLException{
 		String query = """
 				SELECT G.idGioco, G.nome
@@ -299,6 +313,16 @@ public class QueryExecuter {
 		ResultSet rs = ps.executeQuery();
 		
 		return rs;
+	}
+	
+	public void createFriend(String username, String usernameF) throws SQLException {
+		String query = "INSERT INTO Amicizia values (?,?,?) ";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		ps.setString(2, usernameF);
+		ps.setString(3, currentDate());
+		ps.execute();
 	}
 	
 	public ResultSet showScoreBoardTeams() throws SQLException {
