@@ -275,15 +275,38 @@ public class MainFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					String usernameF = friendUsername.getText();
 					try {
-						exe.createFriend(selectedUsername, usernameF);
+						exe.friendRequest(selectedUsername, usernameF);
 						loadPanel(FriendPanel.this);
 					} catch (SQLException e1) {
-						error.showMessageDialog(MainFrame.this, "Errore durante la creazione dell'amicizia!!!");
+						error.showMessageDialog(MainFrame.this, "Errore durante la richiesta di amicizia!!!");
 					}
 				}
 				
 			});
 			createFriend.add(create);
+			
+			JPanel acceptPanel = new JPanel();
+			this.add(acceptPanel);
+			
+			acceptPanel.add(new JLabel("Friend requests: "));
+			
+			requests = new JComboBox();
+			acceptPanel.add(requests);
+			
+			JButton acceptButton = new JButton("Accetta");
+			acceptButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						exe.acceptFriendRequest(selectedUsername, (String)requests.getSelectedItem());
+					
+						MainFrame.this.loadPanel(FriendPanel.this);
+					} catch (SQLException e1) {
+						//JOptionPane.showMessageDialog(MainFrame.this, "Errore durante l'accettazione della richiesta");
+					}
+				}
+			});
+			acceptPanel.add(acceptButton);
 			
 			JPanel backPanel = new JPanel();
 			this.add(backPanel);
@@ -298,6 +321,7 @@ public class MainFrame extends JFrame {
 			System.out.println("wewe");
 			
 			combo.removeAllItems();
+			requests.removeAllItems();
 			
 			try {
 				ResultSet rs = exe.showFriends(selectedUsername);
@@ -319,9 +343,23 @@ public class MainFrame extends JFrame {
 				error.showMessageDialog(MainFrame.this, "Error......");
 				e.printStackTrace();
 			}
+			
+			try {
+				ResultSet rs = exe.showFriendRequests(selectedUsername);
+				while(rs.next()) {
+					String usernameRequester = rs.getString("accountRichiedente");
+					
+					requests.addItem(usernameRequester);
+				}
+				
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(MainFrame.this, "Errore durante il caricamento delle richieste di amicizia");
+				e.printStackTrace();
+			}
 		}
 		
 		private JComboBox combo;
+		private JComboBox requests;
 	}
 	
 	public class ReportPanel extends LoadablePanel {

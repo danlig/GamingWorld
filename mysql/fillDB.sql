@@ -23,8 +23,10 @@ INSERT INTO Account values ("ambrogio", "pass", "email", '2001-01-01');
 
 -- INSERIMENTO AMICIZIA
 INSERT INTO Amicizia values ("antonio", "antonio2", '2003-02-02');
-INSERT INTO Amicizia values ("antonio", "ambrogio", '2003-02-02');
+-- INSERT INTO Amicizia values ("antonio", "ambrogio", '2003-02-02');
 INSERT INTO Amicizia values ("ambrogio", "antonio2", '2003-02-02');
+INSERT INTO Amicizia values ("antonio", "ambrogio", null);
+-- INSERT INTO Amicizia values ("ambrogio", "antonio2", null); #ERROR GENERATOR LINE
 -- INSERT INTO Amicizia values ("antonio", "antonio", '2003-02-02'); #ERROR GENERATOR LINE
 
 -- INSERIMENTO REPORT
@@ -41,7 +43,6 @@ INSERT INTO Gioco (nome, memoriaOccupata, descrizione, pageURL, idPublisher) val
 INSERT INTO Gioco (nome, memoriaOccupata, descrizione, pageURL, idPublisher) values ("God Of War Ragnarock", 2000, "", "https://it.wikipedia.org/wiki/God_of_War", 1);
 INSERT INTO Gioco (nome, memoriaOccupata, descrizione, pageURL, idPublisher) values ("LeagueOfLegends", 5000, "", "https://it.wikipedia.org/wiki/God_of_War", 4);
 INSERT INTO Gioco (nome, memoriaOccupata, descrizione, pageURL, idPublisher) values ("Fortnite", 2000, "", "https://www.epicgames.com/fortnite/it/home", 3);
-
 
 -- INSERIMENTO TEAMGAME
 INSERT INTO TeamGame values (3);
@@ -98,6 +99,9 @@ INSERT INTO ServerGame values (4);
 INSERT INTO Server (idGioco, latenzaMedia) values (4, 24);
 INSERT INTO Server (idGioco, latenzaMedia) values (4, 60);
 INSERT INTO Server (idGioco, latenzaMedia) values (4, 45);
+
+-- INSERIMENTO SALVA
+INSERT INTO Salva (username, idServer, nome) values ("antonio", 1, "ciao");
 
 -- INSERIMENTO DEVELOPER
 INSERT INTO Developer (sedeLegale, nome) values ("", "Santa Monica Studios");

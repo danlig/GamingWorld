@@ -59,6 +59,145 @@ public class QueryExecuter {
 		return ps.execute();
 	}
 	
+	public ResultSet showFriendRequests(String username) throws SQLException {
+		String query = """
+				SELECT accountRichiedente
+				FROM Amicizia
+				WHERE accountAccettante = ? AND data IS NULL;
+				""";
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		
+		ResultSet rs = ps.executeQuery();
+		return rs;
+	}
+	
+	public void deleteFriend(String username, String usernameF) throws SQLException {
+		String query = """
+				DELETE FROM Amicizia WHERE (accountAccettante = ? AND accountRichiedente = ?) OR (accountAccetante = ? AND accountRichiedente = ?);
+					   """;
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		ps.setString(2, usernameF);
+		ps.setString(3, usernameF);
+		ps.setString(4, username);
+		
+		ps.execute();
+		
+	}
+	
+	public ResultSet listaGiochiPerAmici(String username, String friend) throws SQLException{
+		String query = """
+					SELECT nome
+					FROM Gioco
+					WHERE idGioco in
+					(SELECT idGioco
+						FROM Possiede
+						WHERE username = ?)
+					AND idGioco in
+					(SELECT idGioco
+						FROM  Possiede
+						WHERE username = ?);
+					""";
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, friend);
+		ps.setString(2, username);
+		ResultSet rs = ps.executeQuery();
+		return rs;
+	}
+
+	public int countAmici(String username) {
+		String query = """
+				SELECT COUNT(*) AS NumeroAmici
+				FROM Account, Amicizia
+				WHERE username = ? 
+				AND (
+					username = accountRichiedente
+					OR username = accountAccettante
+				)
+				AND data IS NOT NULL;				
+				""";
+		
+		int amici = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ps.setString(1, username);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next())
+				amici = rs.getInt("NumeroAmici");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return amici;
+	}
+	
+	public void acceptFriendRequest(String username, String usernameF) throws SQLException {
+		String query = "UPDATE Amicizia SET data = ? "
+				+ "WHERE (accountAccettante = ? AND accountRichiedente = ?) OR (accountAccettante = ? AND accountRichiedente = ?) ";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, this.currentDate());
+		ps.setString(2, username);
+		ps.setString(3, usernameF);
+		ps.setString(4, usernameF);
+		ps.setString(5, username);
+		
+		ps.execute();
+	}
+	
+	public void friendRequest(String username, String usernameF) throws SQLException {
+		String query = "INSERT INTO Amicizia values (?,?,?) ";
+
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		ps.setString(2, usernameF);
+		ps.setString(3, null);
+		ps.execute();
+	}
+	
+	public ResultSet showFriends(String username) throws SQLException {
+		String query = """
+				SELECT * 
+				FROM Amicizia as A
+				WHERE A.accountAccettante = ?
+				OR A.accountRichiedente = ?;
+				""";
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, username);
+		ps.setString(2, username);
+		ResultSet rs = ps.executeQuery();
+		
+		return rs;
+	}
+	
+	public ResultSet listaFriendWithAGame(String username, String nomeGioco) throws SQLException {
+		
+		String query = """
+					SELECT DISTINCT P.username
+					FROM Amicizia as AM, Possiede as P, Gioco as G
+					WHERE G.nome = ? 
+					AND P.idGioco = G.idGioco 
+					AND ( (accountAccettante = ? AND P.username = accountRichiedente) 
+					OR (accountRichiedente = ? AND P.username = accountAccettante) )
+					AND AM.data IS NOT NULL;
+				""";
+		
+		PreparedStatement ps = conn.prepareStatement(query);
+		ps.setString(1, nomeGioco);
+		ps.setString(2, username);
+		ps.setString(3, username);
+		ResultSet rs = ps.executeQuery();
+		
+		return rs;
+	}
+	
 	public ResultSet listOfFavoritesServers(String username) throws SQLException {		
 		String query = """
 					SELECT Sa.nome, S.idServer, S.latenzaMedia
@@ -85,57 +224,6 @@ public class QueryExecuter {
 		ResultSet rs = ps.executeQuery();
 		return rs;
 	}
-
-	public ResultSet listaGiochiPerAmici(String username, String friend) throws SQLException{
-		String query = """
-					SELECT nome
-					FROM Gioco
-					WHERE idGioco in
-					(SELECT idGioco
-						FROM Possiede
-						WHERE username = ?)
-					AND idGioco in
-					(SELECT idGioco
-						FROM  Possiede
-						WHERE username = ?);
-					""";
-		
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, friend);
-		ps.setString(2, username);
-		ResultSet rs = ps.executeQuery();
-		return rs;
-	}
-
-	
-	public int countAmici(String username) {
-		String query = """
-				SELECT COUNT(*) AS NumeroAmici
-				FROM Account, Amicizia
-				WHERE username = ? 
-				AND (
-					username = accountRichiedente
-					OR username = accountAccettante
-				);
-				
-				""";
-		
-		int amici = 0;
-		try {
-			PreparedStatement ps = conn.prepareStatement(query);
-			
-			ps.setString(1, username);
-			
-			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next())
-				amici = rs.getInt("NumeroAmici");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return amici;
-	}
 	
 	public double winRate(String username) throws SQLException {
 		String query = """
@@ -150,7 +238,6 @@ public class QueryExecuter {
 						WHERE (T.nome = M.team1 OR T.nome = M.team2) 
                         AND T.nome = C.nome
                         AND (C.componente = ?);
-
 					""";
 		
 		double winRate = 0.0f;
@@ -220,25 +307,6 @@ public class QueryExecuter {
 		
 		PreparedStatement ps = conn.prepareStatement(query);
 		ResultSet rs = ps.executeQuery();
-		return rs;
-	}
-	
-	public ResultSet listaFriendWithAGame(String username, String nomeGioco) throws SQLException {
-		
-		String query = """
-					SELECT DISTINCT P.username
-					FROM Amicizia as AM, Possiede as P, Gioco as G
-					WHERE G.nome = ? AND P.idGioco = G.idGioco AND
-					(accountAccettante = ? AND P.username = accountRichiedente) 
-					OR (accountRichiedente = ? AND P.username = accountAccettante);
-				""";
-		
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, nomeGioco);
-		ps.setString(2, username);
-		ps.setString(3, username);
-		ResultSet rs = ps.executeQuery();
-		
 		return rs;
 	}
 	
@@ -315,15 +383,15 @@ public class QueryExecuter {
 		return rs;
 	}
 	
-	public void createFriend(String username, String usernameF) throws SQLException {
-		String query = "INSERT INTO Amicizia values (?,?,?) ";
-
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, username);
-		ps.setString(2, usernameF);
-		ps.setString(3, currentDate());
-		ps.execute();
-	}
+//	public void createFriend(String username, String usernameF) throws SQLException {
+//		String query = "INSERT INTO Amicizia values (?,?,?) ";
+//
+//		PreparedStatement ps = conn.prepareStatement(query);
+//		ps.setString(1, username);
+//		ps.setString(2, usernameF);
+//		ps.setString(3, currentDate());
+//		ps.execute();
+//	}
 	
 	public ResultSet showScoreBoardTeams() throws SQLException {
 		String query = """
@@ -378,37 +446,6 @@ public class QueryExecuter {
 		ResultSet rs = ps.executeQuery();
 		
 		return rs;
-	}
-	
-	public ResultSet showFriends(String username) throws SQLException {
-		String query = """
-				SELECT * 
-				FROM Amicizia as A
-				WHERE A.accountAccettante = ?
-				OR A.accountRichiedente = ?;
-				""";
-		
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, username);
-		ps.setString(2, username);
-		ResultSet rs = ps.executeQuery();
-		
-		return rs;
-	}
-	
-	public void deleteFriend(String username, String friend) throws SQLException {
-		String query ="""
-				DELETE FROM Amicizia 
-				WHERE (accountAccettante = ? AND accountRichiedente = ?) 
-				OR (accountAccettante = ? AND accountRichiedente = ?);
-				""";
-		
-		PreparedStatement ps = conn.prepareStatement(query);
-		ps.setString(1, username);
-		ps.setString(2, friend);
-		ps.setString(3, friend);
-		ps.setString(4, username);	
-		ps.execute();	
 	}
 	
 	public void end() {

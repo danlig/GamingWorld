@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS Account (
 CREATE TABLE IF NOT EXISTS Amicizia (
   accountRichiedente VARCHAR(50) NOT NULL,
   accountAccettante VARCHAR(50) NOT NULL,
-  data DATE NOT NULL,
+  -- data DATE NOT NULL,
+  data DATE,
   INDEX accountRichiedente_idx (accountRichiedente ASC) VISIBLE,
   INDEX accountAccettante_idx (accountAccettante ASC) VISIBLE,
   PRIMARY KEY (accountRichiedente, accountAccettante),
@@ -54,6 +55,7 @@ CREATE TABLE IF NOT EXISTS Amicizia (
 
 
 -- TRIGGERS FOR AMICIZIA
+/*
 DELIMITER //
 CREATE TRIGGER differentUsername BEFORE INSERT ON Amicizia for each row 
 begin 
@@ -61,17 +63,18 @@ IF NEW.accountAccettante = NEW.accountRichiedente THEN SET NEW.accountAccettante
 end if;
 end // 
 DELIMITER ; 
+*/
 
-
-/*
+#MOD
 DELIMITER //
-CREATE TRIGGER differentUsername BEFORE INSERT ON Amicizia for each row 
+CREATE TRIGGER validFriendShip BEFORE INSERT ON Amicizia for each row 
 begin 
-IF NEW.accountAccettante = NEW.accountRichiedente THEN signal sqlstate '45000';
+IF NEW.accountAccettante = NEW.accountRichiedente OR 
+EXISTS(SELECT * FROM Amicizia as A2 WHERE NEW.accountAccettante = A2.accountRichiedente AND NEW.accountRichiedente = A2.accountAccettante) 
+THEN SET NEW.accountAccettante = NULL;
 end if;
 end // 
 DELIMITER ; 
-*/
 
 
 
@@ -95,6 +98,17 @@ CREATE TABLE IF NOT EXISTS Report (
     ON DELETE CASCADE -- CHIEDERE
     ON UPDATE CASCADE
 );
+
+
+
+DELIMITER //
+CREATE TRIGGER differentUsernameReport BEFORE INSERT ON Report for each row 
+begin 
+IF NEW.reported = NEW.reporter THEN signal sqlstate '45000';
+end if;
+end // 
+DELIMITER ; 
+
 
 
 -- -----------------------------------------------------
@@ -425,8 +439,6 @@ CREATE TABLE IF NOT EXISTS Achievement (
   idGioco INT NOT NULL,
   descrizione LONGTEXT NOT NULL,
   INDEX idGioco_idx (idGioco ASC) VISIBLE,
---  INDEX nome_idx (nome ASC) VISIBLE,
-  -- PRIMARY KEY (idGioco, nome),
    PRIMARY KEY (nome, idGioco),
   CONSTRAINT achievement_gioco
     FOREIGN KEY (idGioco)
