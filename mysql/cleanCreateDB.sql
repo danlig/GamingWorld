@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS Report (
   Reported VARCHAR(50) NOT NULL,
   Reporter VARCHAR(50) NOT NULL,
   data DATE NOT NULL,
-  motivo ENUM("hacking", "bullismo", "spam") ,
+  motivo ENUM("hacking", "bullismo", "spam") NOT NULL,
   INDEX reported_idx (Reported ASC) VISIBLE,
   INDEX reporter_idx (Reporter ASC) VISIBLE,
   PRIMARY KEY (Reported, Reporter, data),
@@ -246,10 +246,14 @@ CREATE TABLE IF NOT EXISTS Team (
 CREATE TABLE IF NOT EXISTS Compone (
 	nome VARCHAR(50) NOT NULL,
     CONSTRAINT nome 
-    FOREIGN KEY (nome) references Team (nome),
-    componente VARCHAR(50) NOT NULL,
+    FOREIGN KEY (nome) references Team (nome)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    componente VARCHAR(50) ,
     CONSTRAINT componente 
     FOREIGN KEY (componente) references Account (username)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
 );
 
 
@@ -331,7 +335,7 @@ CREATE TABLE IF NOT EXISTS ServerGame (
 -- Table Server
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS Server (
-  idServer INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  idServer INT UNSIGNED AUTO_INCREMENT,
   idGioco INT NOT NULL,
   latenzaMedia INT UNSIGNED NOT NULL,
   PRIMARY KEY (idServer),
@@ -419,7 +423,7 @@ CREATE TABLE IF NOT EXISTS Changelog (
   version INT UNSIGNED NOT NULL AUTO_INCREMENT,
   idGioco INT NOT NULL,
   descrizione LONGTEXT NOT NULL,
-  URL VARCHAR(100) NULL,
+  URL VARCHAR(100) NOT NULL,
   specifiche VARCHAR(60) NOT NULL,
   INDEX idGioco_idx (idGioco ASC) VISIBLE,
   PRIMARY KEY (version, idGioco),
