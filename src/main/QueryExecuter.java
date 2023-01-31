@@ -3,7 +3,6 @@ package main;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;  
 
 public class QueryExecuter {
 	
@@ -75,8 +74,9 @@ public class QueryExecuter {
 	
 	public void deleteFriend(String username, String usernameF) throws SQLException {
 		String query = """
-				DELETE FROM Amicizia WHERE (accountAccettante = ? AND accountRichiedente = ?) OR (accountAccetante = ? AND accountRichiedente = ?);
+				DELETE FROM Amicizia WHERE (accountAccettante = ? AND accountRichiedente = ?) OR (accountAccettante = ? AND accountRichiedente = ?);
 					   """;
+		
 		PreparedStatement ps = conn.prepareStatement(query);
 		ps.setString(1, username);
 		ps.setString(2, usernameF);
@@ -165,8 +165,10 @@ public class QueryExecuter {
 		String query = """
 				SELECT * 
 				FROM Amicizia as A
-				WHERE A.accountAccettante = ?
-				OR A.accountRichiedente = ?;
+				WHERE (A.accountAccettante = ?
+				OR A.accountRichiedente = ?)
+				AND A.data IS NOT NULL
+				;
 				""";
 		
 		PreparedStatement ps = conn.prepareStatement(query);
