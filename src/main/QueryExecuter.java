@@ -397,9 +397,9 @@ public class QueryExecuter {
 	
 	public ResultSet showScoreBoardTeams() throws SQLException {
 		String query = """
-				SELECT T.nome, (SELECT Count(*) as V FROM `Match` as M WHERE (T.nome = M.team1 OR T.nome = M.team2) AND T.nome = M.teamVincitore) as Vittorie
+				SELECT T.nome, (SELECT Count(*) FROM `Match` as M WHERE (T.nome = M.team1 OR T.nome = M.team2) AND T.nome = M.teamVincitore) as Vittorie
 				FROM Team as T
-				ORDER BY Vittorie;
+				ORDER BY Vittorie DESC;
 			""";
 	
 		PreparedStatement ps = conn.prepareStatement(query);

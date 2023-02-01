@@ -45,7 +45,11 @@ use dbtest;
 
 -- UPDATE Amicizia SET data = '2002-10-20' WHERE (accountAccettante = "antonio" AND accountRichiedente = "ambrogio") OR (accountAccettante = "ambrogio" AND accountRichiedente = "antonio");
 
-SELECT accountRichiedente
-FROM Amicizia
-WHERE accountAccettante = "ambrogio" AND data IS NULL;
+				SELECT T.nome, (SELECT Count(*) FROM `Match` as M WHERE (T.nome = M.team1 OR T.nome = M.team2) AND T.nome = M.teamVincitore) as Vittorie
+				FROM Team as T
+				ORDER BY Vittorie;
+
+
+
+
 

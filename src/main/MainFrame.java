@@ -2,7 +2,6 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,12 +9,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import javax.swing.*;
 
@@ -259,7 +256,7 @@ public class MainFrame extends JFrame {
 			JPanel createFriend = new JPanel();
 			this.add(createFriend);
 			
-			label = new JLabel("Crea amicizia: ");
+			label = new JLabel("Richiedi amicizia: ");
 			createFriend.add(label);
 			
 			label = new JLabel("username: ");
@@ -382,7 +379,7 @@ public class MainFrame extends JFrame {
 				ResultSet rs = exe.showReport(selectedUsername);
 				
 				while(rs.next()) {
-					area.setText(area.getText() + "Username reporter: " + rs.getString("Reporter") + " motivo: " + rs.getString("motivo"));
+					area.setText(area.getText() + "Username reporter: " + rs.getString("Reporter") + " motivo: " + rs.getString("motivo") + "\n");
 				}
 
 				
