@@ -13,7 +13,6 @@ INSERT INTO Account values ("ambrogio", "pass", "email", '2001-01-01');
 
 -- INSERIMENTO AMICIZIA
 INSERT INTO Amicizia values ("antonio", "adolfo", '2003-02-02');
--- INSERT INTO Amicizia values ("antonio", "ambrogio", '2003-02-02');
 INSERT INTO Amicizia values ("ambrogio", "adolfo", '2003-02-02');
 INSERT INTO Amicizia values ("ambrogio", "antonio", null);
 INSERT INTO Amicizia values ("adonis.koss", "adolfo", '2023-02-01');
@@ -47,32 +46,6 @@ INSERT INTO Team values ("Desperados");
 INSERT INTO Team values ("Down-Elo");
 INSERT INTO Team values ("Med-Elo");
 
-/*
-INSERT INTO Compone values ("Desperados", "adonis.koss");
-INSERT INTO Compone values ("Desperados", "adrain90");
-INSERT INTO Compone values ("Desperados", "alana61");
-INSERT INTO Compone values ("Desperados", "antonio");
-INSERT INTO Compone values ("Desperados", "adolfo");
-
-INSERT INTO Compone values ("Up-Elo", "ambrogio");
-INSERT INTO Compone values ("Up-Elo", "adrain90");
-INSERT INTO Compone values ("Up-Elo", "alana61");
-INSERT INTO Compone values ("Up-Elo", "antonio");
-INSERT INTO Compone values ("Up-Elo", "adolfo");
-
-INSERT INTO Compone values ("Down-Elo", "ambrogio");
-INSERT INTO Compone values ("Down-Elo", "adrain90");
-INSERT INTO Compone values ("Down-Elo", "alana61");
-INSERT INTO Compone values ("Down-Elo", "antonio");
-INSERT INTO Compone values ("Down-Elo", "adolfo");
-
-INSERT INTO Compone values ("Med-Elo", "alayna.weimann");
-INSERT INTO Compone values ("Med-Elo", "alexandrea.torp");
-INSERT INTO Compone values ("Med-Elo", "alexis05");
-INSERT INTO Compone values ("Med-Elo", "amelia35");
-INSERT INTO Compone values ("Med-Elo", "bauch.arnulfo");
-*/
-
 INSERT INTO Compone values ("Med-Elo", "alayna.weimann");
 INSERT INTO Compone values ("Med-Elo", "alexandrea.torp");
 INSERT INTO Compone values ("Med-Elo", "alexis05");
@@ -90,17 +63,9 @@ INSERT INTO Compone values ("Down-Elo", "alexandrea.torp");
 INSERT INTO Compone values ("Down-Elo", "alexis05");
 INSERT INTO Compone values ("Down-Elo", "amelia35");
 INSERT INTO Compone values ("Down-Elo", "alayna.weimann");
--- INSERT INTO Compone values ("Med-Elo", "ambrogio");
+-- INSERT INTO Compone values ("Down-Elo", "ambrogio");
 
 -- INSERIMENTO MATCH
-/*
-INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Up-Elo", "Up-Elo", 2000, '2015-01-02');
-INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Up-Elo", "Desperados", "Up-Elo", 2000, '2015-01-02');
-INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Up-Elo", "Desperados", "Up-Elo", 2000, '2015-01-02');
-INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Med-Elo", 2000, '2015-01-02');
-INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Med-Elo", 2000, '2015-01-02');
-INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Med-Elo", 2000, '2015-01-02');
-*/
 INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Desperados", 200, '2015-01-02');
 INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Desperados", 200, '2015-01-02');
 INSERT INTO `Match` (idGioco, team1, team2, teamVincitore, durata, data) values (3, "Desperados", "Med-Elo", "Desperados", 200, '2015-01-02');
@@ -158,6 +123,7 @@ INSERT INTO Achievement values ("Primo Sangue", 3, "Hai ucciso il tuo primo nemi
 INSERT INTO Achievement values ("Ultimo a sopravvivere", 4, "Sei rimasto l'ultimo in vita in una modalità di gioco");
 INSERT INTO Achievement values ("L'inizio", 1, "Hai iniziato la tua avventura!");
 
+-- INSERIMENTO POSSIEDE
 INSERT INTO Possiede values ("antonio", 3, '2002-01-01', 20);
 INSERT INTO Possiede values ("antonio", 4, '2003-01-01', 10);
 INSERT INTO Possiede values ("adolfo", 3, '2020-02-04', 0);
@@ -167,11 +133,3 @@ INSERT INTO Possiede values ("ambrogio", 4, '2004-01-01', 0);
 -- INSERIMENTO SBLOCCA
 INSERT INTO Sblocca values ("antonio", "Primo Sangue", 3);
 INSERT INTO Sblocca values ("adolfo", "Primo Sangue", 3);
--- INSERT INTO Sblocca values ("antonio", "L'inizio", 1);
-
--- INSERIMENTO POSSIEDE
-/*
-INSERT INTO Possiede (username, idGioco, dataAcquisto) values ("antonio", 3, '2002-01-01');
-INSERT INTO Possiede (username, idGioco, dataAcquisto) values ("antonio", 4, '2003-01-01');
-INSERT INTO Possiede (username, idGioco, dataAcquisto) values ("antonio2", 4, '2004-01-01'); 
-*/

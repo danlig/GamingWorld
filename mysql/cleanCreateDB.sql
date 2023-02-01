@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS Account (
 CREATE TABLE IF NOT EXISTS Amicizia (
   accountRichiedente VARCHAR(50) NOT NULL,
   accountAccettante VARCHAR(50) NOT NULL,
-  -- data DATE NOT NULL,
   data DATE,
   INDEX accountRichiedente_idx (accountRichiedente ASC) VISIBLE,
   INDEX accountAccettante_idx (accountAccettante ASC) VISIBLE,
